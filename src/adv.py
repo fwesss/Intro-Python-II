@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -40,19 +41,41 @@ room["narrow"].w_to = room["foyer"]
 room["narrow"].n_to = room["treasure"]
 room["treasure"].s_to = room["narrow"]
 
-#
-# Main
-#
 
-# Make a new player object that is currently in the 'outside' room.
+class Game:
+    def __init__(self):
+        self.playing = True
+        self.valid_move = True
 
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+    def quit_game(self):
+        print("\nThanks for playing!\n")
+        self.playing = False
+
+
+if __name__ == "__main__":
+    name = input("What is your name?\n")
+    player = Player(name, room["outside"])
+    print(f"\nWelcome {player.name}!\n")
+
+    game = Game()
+    choices = {
+        "n": player.move("north", game),
+        "e": player.move("east", game),
+        "s": player.move("south", game),
+        "w": player.move("west", game),
+        "q": game.quit_game,
+    }
+
+    while game.playing:
+        if game.valid_move:
+            print(f"\n{player.current_room.name}")
+            print(f"{player.current_room.description}\n")
+
+        choice = input(
+            "Where do you want to go?\n[n]orth [e]ast [s]outh [w]est or [q]uit"
+        )
+        if choice not in choices:
+            print("\nPlease choose a valid action.\n")
+            game.valid_move = False
+        else:
+            choices[choice]()
