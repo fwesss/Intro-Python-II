@@ -30,15 +30,12 @@ class Player:
             if item_name is None:
                 print("\nPlease select an item.")
                 game.valid_action = False
-            elif item_name in [item.name for item in self.current_room.items]:
-                active_item = next(
-                    (
-                        item
-                        for item in self.current_room.items
-                        if item.name == item_name
-                    ),
-                    None,
-                )
+
+            active_item = next(
+                (item for item in self.current_room.items if item.name == item_name),
+                None,
+            )
+            if active_item is not None:
                 self.items.append(active_item)
                 self.current_room.items.remove(active_item)
                 active_item.on_take()
@@ -54,10 +51,11 @@ class Player:
             if item_name is None:
                 print("\nPlease select an item")
                 game.valid_action = False
-            elif item_name in [item.name for item in self.items]:
-                active_item = next(
-                    (item for item in self.items if item.name == item_name), None
-                )
+
+            active_item = next(
+                (item for item in self.items if item.name == item_name), None
+            )
+            if active_item is not None:
                 self.current_room.items.append(active_item)
                 self.items.remove(active_item)
                 active_item.on_drop()
