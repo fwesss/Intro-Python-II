@@ -1,15 +1,22 @@
-from typing import List
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import List, Callable, Dict, Any, Optional
+    from room import Room
+    from item import Item
+    from adv import Game
 
 
 class Player:
-    def __init__(self, name: str, current_room, items):
+    def __init__(self, name: str, current_room: Room, items: List[Item]) -> None:
         self.name = name
         self.current_room = current_room
         self.items = items
 
-    def move(self, direction: str, game):
-        def commit():
-            directions = {
+    def move(self, direction: str, game: Game) -> Callable[[], None]:
+        def commit() -> None:
+            directions: Dict[str, Any] = {
                 "north": self.current_room.n_to,
                 "east": self.current_room.e_to,
                 "south": self.current_room.s_to,
@@ -25,8 +32,8 @@ class Player:
 
         return commit
 
-    def take(self, item_name: str, game):
-        def commit():
+    def take(self, item_name: Optional[str], game: Game) -> Callable[[], None]:
+        def commit() -> None:
             if item_name is None:
                 print("\nPlease select an item.")
                 game.valid_action = False
@@ -46,8 +53,8 @@ class Player:
 
         return commit
 
-    def drop(self, item_name, game):
-        def commit():
+    def drop(self, item_name: Optional[str], game: Game) -> Callable[[], None]:
+        def commit() -> None:
             if item_name is None:
                 print("\nPlease select an item")
                 game.valid_action = False
@@ -66,7 +73,7 @@ class Player:
 
         return commit
 
-    def view_inventory(self):
+    def view_inventory(self) -> None:
         if len(self.items) > 0:
             print("You have:")
             for item in self.items:

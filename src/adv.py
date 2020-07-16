@@ -1,10 +1,11 @@
+from typing import Dict, Any, Optional
+
 from room import Room
 from player import Player
 from item import Item
 
-# Declare all the rooms
 
-room = {
+room: Dict[str, Any] = {
     "outside": Room(
         "Outside Cave Entrance", "North of you, the cave mount beckons", []
     ),
@@ -84,7 +85,7 @@ if __name__ == "__main__":
             else:
                 print("There is nothing in this room.")
 
-        action = input(
+        action: str = input(
             "\nWhat do you want to do?\n"
             "Go [n]orth, [e]ast, [s]outh, or [w]est,\n"
             "[get] | [take] or [drop] 'item',\n"
@@ -93,18 +94,18 @@ if __name__ == "__main__":
         )
 
         verb = action.split(" ")[0]
-        item = None
+        item_name = None
         if len(action.split(" ")) > 1:
-            item = action.split(" ")[1]
+            item_name = action.split(" ")[1]
 
         actions = {
             "n": player.move("north", game),
             "e": player.move("east", game),
             "s": player.move("south", game),
             "w": player.move("west", game),
-            "get": player.take(item, game),
-            "take": player.take(item, game),
-            "drop": player.drop(item, game),
+            "get": player.take(item_name, game),
+            "take": player.take(item_name, game),
+            "drop": player.drop(item_name, game),
             "i": player.view_inventory,
             "inventory": player.view_inventory,
             "q": game.quit_game,
